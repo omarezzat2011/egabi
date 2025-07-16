@@ -9,6 +9,9 @@ import com.omarezzat.university.repository.GradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class GradeServiceImpl implements GradeService {
@@ -21,12 +24,7 @@ public class GradeServiceImpl implements GradeService {
         EnrollmentId id = new EnrollmentId(studentId, courseId);
         Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Enrollment not found"));
-
-        Grade grade = new Grade();
-        grade.setId(id);
-        grade.setEnrollment(enrollment);
-        grade.setGrade(value);
-
+        Grade grade = new Grade(enrollment, value);
         return gradeRepository.save(grade);
     }
 
@@ -35,5 +33,21 @@ public class GradeServiceImpl implements GradeService {
         EnrollmentId id = new EnrollmentId(studentId, courseId);
         return gradeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Grade not found"));
+    }
+
+    @Override
+    public List<Grade> getAllGrades() {
+        return gradeRepository.findAll();
+    }
+
+    @Override
+    public void deleteGrade(Long studentId, Long courseId) {
+        EnrollmentId id = new EnrollmentId(studentId, courseId);
+        Optional<Grade> grade = gradeRepository.findById(id);
+        if (grade.isEmpty()) {
+            throw new NotFoundException("Enrollment with Id: " + id + " Not Found");
+        }
+        gradeRepository.deleteById(id);
+
     }
 }

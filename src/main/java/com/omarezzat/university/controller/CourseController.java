@@ -1,6 +1,7 @@
 package com.omarezzat.university.controller;
 
 import com.omarezzat.university.model.Course;
+import com.omarezzat.university.repository.CourseRepository;
 import com.omarezzat.university.service.Course.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseRepository courseRepository;
 
     @GetMapping
     public ResponseEntity<List<Course>> getAll() {
@@ -35,6 +37,12 @@ public class CourseController {
     @PutMapping
     public ResponseEntity<Void> update(@RequestBody Course course) {
         courseService.updateCourse(course);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();
     }
 }

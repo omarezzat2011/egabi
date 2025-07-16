@@ -8,10 +8,12 @@ import com.omarezzat.university.model.Student;
 import com.omarezzat.university.repository.CourseRepository;
 import com.omarezzat.university.repository.EnrollmentRepository;
 import com.omarezzat.university.repository.StudentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,4 +46,16 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return enrollmentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Enrollment not found"));
     }
+
+    @Override
+    @Transactional
+    public void deleteEnrollment(Long studentId, Long courseId) {
+        EnrollmentId id = new EnrollmentId(studentId, courseId);
+        Optional<Enrollment> enrollment = enrollmentRepository.findById(id);
+        if (enrollment.isEmpty()) {
+            throw new NotFoundException("Enrollment with Id: " + id + " Not Found");
+        }
+        enrollmentRepository.deleteById(id);
+    }
 }
+

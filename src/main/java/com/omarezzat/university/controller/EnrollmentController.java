@@ -1,6 +1,7 @@
 package com.omarezzat.university.controller;
 
 import com.omarezzat.university.model.Enrollment;
+import com.omarezzat.university.model.EnrollmentId;
 import com.omarezzat.university.service.Enrollment.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,10 @@ public class EnrollmentController {
             @PathVariable Long studentId,
             @PathVariable Long courseId) {
         return ResponseEntity.ok(enrollmentService.findEnrollment(studentId, courseId));
+    }
+    @DeleteMapping("/{studentId}/{courseId}")
+    public ResponseEntity<Void> delete(@PathVariable Long studentId,@PathVariable Long courseId) {
+        enrollmentService.deleteEnrollment(studentId,courseId);
+        return ResponseEntity.noContent().build();
     }
 }

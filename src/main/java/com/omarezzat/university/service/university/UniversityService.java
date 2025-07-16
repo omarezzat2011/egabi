@@ -12,4 +12,5 @@ public interface UniversityService {
     void addUniversity(University university);
     void updateUniversity(University university);
     void deleteUniversity(Long id);
+
 }

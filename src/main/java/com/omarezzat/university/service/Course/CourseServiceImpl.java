@@ -2,12 +2,16 @@ package com.omarezzat.university.service.Course;
 
 import com.omarezzat.university.exception.NotFoundException;
 import com.omarezzat.university.model.Course;
+import com.omarezzat.university.model.Faculty;
 import com.omarezzat.university.repository.CourseRepository;
 import com.omarezzat.university.repository.FacultyRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
@@ -39,5 +43,15 @@ public class CourseServiceImpl implements CourseService {
             throw new NotFoundException("Course not found");
         }
         courseRepository.save(course);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourse(Long id) {
+        Optional<Course> course = courseRepository.findById(id);
+        if (course.isEmpty()) {
+            throw new NotFoundException("Course with Id: " + id + " Not Found");
+        }
+        courseRepository.deleteById(id);
     }
 }

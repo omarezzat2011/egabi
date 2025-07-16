@@ -9,4 +9,6 @@ public interface FacultyService {
     Faculty findById(Long id);
     void addFaculty(Faculty faculty);
     void updateFaculty(Faculty faculty);
+
+    void deleteFaculty(Long id);
 }

@@ -1,17 +1,16 @@
 package com.omarezzat.university.model;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 @EqualsAndHashCode
-//@AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class EnrollmentId implements Serializable {
     private Long studentId;
     private Long courseId;
