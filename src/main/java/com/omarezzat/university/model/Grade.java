@@ -1,52 +1,42 @@
 package com.omarezzat.university.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Entity
-//@Getter
-//@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Grade {
+
     @EmbeddedId
     private EnrollmentId id;
 
-    @MapsId
+    @MapsId("studentId") // link studentId in @EmbeddedId
+    @JoinColumn(name = "student_id")
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
-            @JoinColumn(name = "course_id", referencedColumnName = "course_id")
-    })
-    private Enrollment enrollment;
+    private Student student;
+
+    @MapsId("courseId") // link courseId in @EmbeddedId
+    @JoinColumn(name = "course_id")
+    @ManyToOne
+    private Course course;
 
     @Column(nullable = false)
     private double grade;
 
-    public EnrollmentId getId() {
-        return id;
-    }
-
-    public void setId(EnrollmentId id) {
-        this.id = id;
-    }
-
-    public Enrollment getEnrollment() {
-        return enrollment;
-    }
-
-    public void setEnrollment(Enrollment enrollment) {
-        this.enrollment = enrollment;
-    }
-
-    public double getGrade() {
-        return grade;
-    }
-
-    public void setGrade(double grade) {
+    public Grade(Enrollment enrollment, double grade) {
+        this.id = new EnrollmentId(
+                enrollment.getStudent().getId(),
+                enrollment.getCourse().getId()
+        );
+        this.student = enrollment.getStudent();
+        this.course = enrollment.getCourse();
         this.grade = grade;
     }
+
 }

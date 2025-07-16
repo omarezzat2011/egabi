@@ -1,0 +1,83 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Course Management</h2>
+    <button class="btn btn-success mb-3" (click)="openAddModal()">Add Course</button>
+  
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Course Name</th>
+          <th>Level</th>
+          <th>Faculty</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses">
+          <td>{{ course.id }}</td>
+          <td>{{ course.name }}</td>
+          <td>{{ course.level }}</td>
+          <td>{{ course.faculty.name }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="openEditModal(course)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="confirmDelete(course)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" tabindex="-1" id="courseModal" #courseModal>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form (ngSubmit)="onSubmit()">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ form.id ? 'Edit' : 'Add' }} Course</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" [(ngModel)]="form.id" name="id" />
+            <div class="mb-3">
+              <label class="form-label">Course Name</label>
+              <input [(ngModel)]="form.name" name="name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Level</label>
+              <input [(ngModel)]="form.level" name="level" type="number" min="1" max="7" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Faculty</label>
+              <select class="form-select" name="faculty.id" [(ngModel)]="form.faculty.id" required>
+                <option *ngFor="let f of faculties" [value]="f.id">{{ f.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">{{ form.id ? 'Update' : 'Add' }}</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Modal -->
+  <div class="modal fade" tabindex="-1" id="deleteModal" #deleteModal>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete course <strong>{{ courseToDelete?.name }}</strong>?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteCourse()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

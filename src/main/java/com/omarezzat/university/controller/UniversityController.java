@@ -37,5 +37,11 @@ public class UniversityController {
         universityService.updateUniversity(university);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        universityService.deleteUniversity(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 

@@ -6,12 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/grades")
 @RequiredArgsConstructor
 public class GradeController {
 
     private final GradeService gradeService;
+
 
     @PostMapping("/{studentId}/{courseId}")
     public ResponseEntity<Grade> assignGrade(
@@ -26,6 +29,16 @@ public class GradeController {
             @PathVariable Long studentId,
             @PathVariable Long courseId) {
         return ResponseEntity.ok(gradeService.getGrade(studentId, courseId));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Grade>> getAllGrades() {
+        return ResponseEntity.ok(gradeService.getAllGrades());
+    }
+    @DeleteMapping("/{studentId}/{courseId}")
+    public ResponseEntity<Void> delete(@PathVariable Long studentId,@PathVariable Long courseId) {
+        gradeService.deleteGrade(studentId,courseId);
+        return ResponseEntity.noContent().build();
     }
 }
 

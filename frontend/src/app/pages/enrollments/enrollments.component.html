@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Enrollment Management</h2>
+  
+    <div class="row mb-4">
+      <div class="col-md-5">
+        <label class="form-label">Student</label>
+        <select [(ngModel)]="selectedStudentId" class="form-select">
+          <option [value]="0" disabled>Select a student</option>
+          <option *ngFor="let s of students" [value]="s.id">{{ s.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-5">
+        <label class="form-label">Course</label>
+        <select [(ngModel)]="selectedCourseId" class="form-select">
+          <option [value]="0" disabled>Select a course</option>
+          <option *ngFor="let c of courses" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100" (click)="enroll()" [disabled]="!selectedStudentId || !selectedCourseId">
+          Enroll
+        </button>
+      </div>
+    </div>
+  
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Student</th>
+          <th>Course</th>
+          <th>Enrollment Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of enrollments">
+          <td>{{ e.student.name }}</td>
+          <td>{{ e.course.name }}</td>
+          <td>{{ e.enrollmentDate | date:'shortDate' }}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteEnrollment(e.student.id!, e.course.id!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

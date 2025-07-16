@@ -1,0 +1,134 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Grade Assignment</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <label class="form-label">Student</label>
+      <select [(ngModel)]="selectedStudentId" (change)="onStudentSelected()" class="form-select">
+        <option [value]="0" disabled>Select student</option>
+        <option *ngFor="let student of students" [value]="student.id">{{ student.name }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Course</label>
+      <select [(ngModel)]="selectedCourseId" class="form-select" [disabled]="filteredCourses.length === 0">
+        <option [value]="0" disabled>Select course</option>
+        <option *ngFor="let course of filteredCourses" [value]="course.id">{{ course.name }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Grade</label>
+      <input [(ngModel)]="gradeValue" type="number" class="form-control" min="0" max="100" />
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+      <button class="btn btn-primary w-100" (click)="assignGrade()" [disabled]="!selectedStudentId || !selectedCourseId || gradeValue === null">
+        Assign
+      </button>
+    </div>
+  </div>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Grade</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of enrollments">
+        <td>{{ e.student.name }}</td>
+        <td>{{ e.course.name }}</td>
+  
+        <!-- Grade Column -->
+        <td>
+          <ng-container *ngIf="!isGraded(e); else gradedView">
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              [(ngModel)]="gradeInputs[e.student.id + '-' + e.course.id]"
+              min="0"
+              max="100"
+            />
+          </ng-container>
+          <ng-template #gradedView>
+            <ng-container
+              *ngIf="
+                editingEnrollmentId?.studentId === e.student.id &&
+                editingEnrollmentId?.courseId === e.course.id;
+                else staticGrade
+              "
+            >
+              <input
+                type="number"
+                [(ngModel)]="editGradeValue"
+                class="form-control form-control-sm"
+                min="0"
+                max="100"
+              />
+            </ng-container>
+            <ng-template #staticGrade>
+              {{ getGrade(e) }}
+            </ng-template>
+          </ng-template>
+        </td>
+  
+        <!-- Actions Column -->
+        <td>
+          <ng-container *ngIf="!isGraded(e); else gradedActions">
+            <button
+              class="btn btn-sm btn-success"
+              (click)="assignGradeTo(e)"
+            >
+              Assign
+            </button>
+          </ng-container>
+  
+          <ng-template #gradedActions>
+            <ng-container
+              *ngIf="
+                editingEnrollmentId?.studentId === e.student.id &&
+                editingEnrollmentId?.courseId === e.course.id;
+                else editDeleteButtons
+              "
+            >
+              <button
+                class="btn btn-sm btn-primary me-1"
+                (click)="updateGrade(e)"
+              >
+                Save
+              </button>
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="editingEnrollmentId = null"
+              >
+                Cancel
+              </button>
+            </ng-container>
+  
+            <ng-template #editDeleteButtons>
+              <button
+                class="btn btn-sm btn-warning me-1"
+                (click)="startEdit(e)"
+              >
+                Update
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="deleteGrade(e)"
+              >
+                Delete
+              </button>
+            </ng-template>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+</div>

@@ -1,9 +1,6 @@
 package com.omarezzat.university.model;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,11 +15,11 @@ public class Enrollment {
     @EmbeddedId
     private EnrollmentId id;
 
-    @ManyToOne
+    @ManyToOne()
     @MapsId("studentId")
     private Student student;
 
-    @ManyToOne
+    @ManyToOne()
     @MapsId("courseId")
     private Course course;
 
@@ -31,6 +28,8 @@ public class Enrollment {
         this.student = student;
         this.course = course;
         this.enrollmentDate = LocalDate.now();
+        this.id = new EnrollmentId(student.getId(), course.getId());
+
     }
 
 

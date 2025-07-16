@@ -1,0 +1,105 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Student Management</h2>
+  
+    <button class="btn btn-success mb-3" (click)="openAddModal()">Add Student</button>
+  
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Level</th>
+          <th>National ID</th>
+          <th>Faculty</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>{{ student.id }}</td>
+          <td>{{ student.name }}</td>
+          <td>{{ student.level }}</td>
+          <td>{{ student.nationalId }}</td>
+          <td>{{ student.faculty.name }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="openEditModal(student)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="confirmDelete(student)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" tabindex="-1" id="studentModal" #studentModal>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form (ngSubmit)="onSubmit()">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ form.id ? 'Edit' : 'Add' }} Student</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" [(ngModel)]="form.id" name="id" />
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input [(ngModel)]="form.name" name="name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Level</label>
+              <input [(ngModel)]="form.level" name="level" type="number" min="1" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">National ID</label>
+              <input
+                [(ngModel)]="form.nationalId"
+                name="nationalId"
+                class="form-control"
+                [readonly]="form.id != null"
+                [ngClass]="{ 'is-invalid': nationalIdInvalid }"
+                required
+                maxlength="14"
+                minlength="14"
+                (ngModelChange)="validateNationalId()"
+              />
+              <div class="invalid-feedback">
+                National ID must be exactly 14 characters.
+              </div>
+            </div>
+            
+            
+            <div class="mb-3">
+              <label class="form-label">Faculty</label>
+              <select class="form-select" name="faculty.id" [(ngModel)]="form.faculty.id" required>
+                <option *ngFor="let f of faculties" [value]="f.id">{{ f.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">{{ form.id ? 'Update' : 'Add' }}</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" tabindex="-1" id="deleteModal" #deleteModal>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete student <strong>{{ studentToDelete?.name }}</strong>?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteStudent()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
