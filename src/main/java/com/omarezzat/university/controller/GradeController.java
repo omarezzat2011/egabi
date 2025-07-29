@@ -4,6 +4,7 @@ import com.omarezzat.university.model.Grade;
 import com.omarezzat.university.service.Grade.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class GradeController {
 
 
     @PostMapping("/{studentId}/{courseId}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Grade> assignGrade(
             @PathVariable Long studentId,
             @PathVariable Long courseId,
@@ -36,6 +38,7 @@ public class GradeController {
         return ResponseEntity.ok(gradeService.getAllGrades());
     }
     @DeleteMapping("/{studentId}/{courseId}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Void> delete(@PathVariable Long studentId,@PathVariable Long courseId) {
         gradeService.deleteGrade(studentId,courseId);
         return ResponseEntity.noContent().build();

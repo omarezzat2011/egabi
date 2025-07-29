@@ -11,11 +11,22 @@ import { CoursesComponent } from './pages/courses/courses.component';
 import { StudentsComponent } from './pages/students/students.component';
 import { EnrollmentsComponent } from './pages/enrollments/enrollments.component';
 import { GradesComponent } from './pages/grades/grades.component';
+import { LoginComponent } from './pages/login/login.component';
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor'; // adjust path if needed
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
-  declarations: [AppComponent, UniversitiesComponent, FacultiesComponent, CoursesComponent, StudentsComponent, EnrollmentsComponent, GradesComponent, ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
-  providers: [],
+  declarations: [AppComponent, UniversitiesComponent, FacultiesComponent, CoursesComponent, StudentsComponent, EnrollmentsComponent, GradesComponent, LoginComponent, ],
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule,    BrowserAnimationsModule,    ToastrModule.forRoot()  ],
+  providers: [ {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

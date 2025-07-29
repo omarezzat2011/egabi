@@ -5,6 +5,7 @@ import com.omarezzat.university.service.Faculty.FacultyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,17 +28,20 @@ public class FacultyController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Void> add(@RequestBody Faculty faculty) {
         facultyService.addFaculty(faculty);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Void> update(@RequestBody Faculty faculty) {
         facultyService.updateFaculty(faculty);
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.noContent().build();

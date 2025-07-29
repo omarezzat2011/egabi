@@ -33,4 +33,9 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Grade> grades = new ArrayList<>();
+
+    public Course(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
